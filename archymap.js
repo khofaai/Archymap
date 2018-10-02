@@ -28,7 +28,6 @@
 		Archy.init = function() 
 		{
 			settings = $.extend({}, defaultOptions, options);
-			console.log(settings)
 			if(typeof options !== 'undefined' && (!$.isEmptyObject(options)) && !$.isEmptyObject(settings.map.core) ) {
 				Archy.build(settings.map);
 			} else {
