@@ -28,10 +28,10 @@
 		Archy.init = function() 
 		{
 			settings = $.extend({}, defaultOptions, options);
-			if(typeof options !== 'undefined' && (!$.isEmptyObject(options)) && !$.isEmptyObject(settings.map.core) ) {
+			if(typeof options !== 'undefined' && !$.isEmptyObject(options) ) {
 				Archy.build(settings.map);
 			} else {
-				console.error('someting went wrong')
+				console.error('someting went wrong');
 			}
 		}
 
@@ -62,27 +62,37 @@
 		{
 			var html =''
 			if(typeof core === 'object') {
-				$(core).each(function(el, elem) {
-					if(typeof elem.core === 'object'  && elem.core !== null) {
-						elem.parent = 0;
-						elem.order = el;
-						var span = Archy.generator.getMapSpan({element:elem,bottom:false},1);
-						html += '<div class="archymap-view-child'+(core.length == 1? ' alone-child alone-parent' : '')+'">'
-									+'<div class="archymap-view">'
-										+'<div class="archymap-view-parent">'+span+'</div>'
-										+'<div class="archymap-view-children">'+Archy.getCore(elem.core,elem.name)+'</div>'
-									+'</div>'
+				if (core.length == 0) {
+					var span = Archy.generator.getMapSpan({element:{name:'Card Name'},bottom:true,lvl:1});
+					html += '<div class="archymap-view-child alone-child alone-parent">'
+								+'<div class="archymap-view" data-parentid="0">'
+									+'<div class="archymap-view-parent span-parent">'+span+'</div>'
 								+'</div>'
-					} else {
-						elem.order = el;
-						var span = Archy.generator.getMapSpan({element:elem,bottom:true,isNew:new_site},1);
-						html += '<div class="archymap-view-child'+(new_site || core.length == 1? ' alone-child alone-parent' : '')+'">'
-									+'<div class="archymap-view" data-parentid="0">'
-										+'<div class="archymap-view-parent span-parent">'+span+'</div>'
+							+'</div>'
+				} else {
+
+					$(core).each(function(el, elem) {
+						if(typeof elem.core === 'object'  && elem.core !== null) {
+							elem.parent = 0;
+							elem.order = el;
+							var span = Archy.generator.getMapSpan({element:elem,bottom:false},1);
+							html += '<div class="archymap-view-child'+(core.length == 1? ' alone-child alone-parent' : '')+'">'
+										+'<div class="archymap-view">'
+											+'<div class="archymap-view-parent">'+span+'</div>'
+											+'<div class="archymap-view-children">'+Archy.getCore(elem.core,elem.name)+'</div>'
+										+'</div>'
 									+'</div>'
-								+'</div>'
-					}
-				});
+						} else {
+							elem.order = el;
+							var span = Archy.generator.getMapSpan({element:elem,bottom:true,isNew:new_site},1);
+							html += '<div class="archymap-view-child'+(new_site || core.length == 1? ' alone-child alone-parent' : '')+'">'
+										+'<div class="archymap-view" data-parentid="0">'
+											+'<div class="archymap-view-parent span-parent">'+span+'</div>'
+										+'</div>'
+									+'</div>'
+						}
+					});
+				}
 			} 
 			return html;
 		}
